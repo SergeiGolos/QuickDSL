@@ -1,8 +1,3 @@
-using QuickDSL;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
-using Xunit;
 
 namespace Tests
 {
@@ -11,38 +6,36 @@ namespace Tests
         [Fact]
         public void Test1()
         {
-            var example = "<RootClass><a></a><b></b></RootClass>";
+            var example = "<RootClass><a><a></a></a><b><a></a></b></RootClass>";
             
-            var xmlOverrides = new QuickDslBuilder()
+            var serializer = new QuickDslBuilder()
                 .Override<BaseClass>().With<ClassA>("a")
                 .Override<BaseClass>().With<ClassB>("b")
-                .Build(typeof(RootClass));
-            
-            var serializer = new XmlSerializer(typeof(RootClass), xmlOverrides);
-            
-            using TextReader reader = new StringReader(example);
-            var result = (RootClass)serializer.Deserialize(reader);
-            
+                .Build<RootClass>();
+
+            var result = serializer.Deserialize(example);
+
             Assert.NotEmpty(result.Values);
             Assert.Equal(typeof(ClassA), result.Values.First().GetType());
+            Assert.Equal(typeof(ClassA), result.Values.First().Values.First().GetType());
             Assert.Equal(typeof(ClassB), result.Values.Last().GetType());
         }
-    }
 
-    public class RootClass
-    {
-        public BaseClass[] Values { get; set; }
-    }
+        public class RootClass
+        {
+            public BaseClass[] Values { get; set; }
+        }
 
-    public class BaseClass
-    {        
-    }
-    public class ClassA : BaseClass
-    {
+        public class BaseClass
+        {
+            public BaseClass[] Values { get; set; }
+        }
+        public class ClassA : BaseClass
+        {
+        }
 
-    }
-
-    public class ClassB : BaseClass
-    {
-    }
+        public class ClassB : BaseClass
+        {
+        }
+    }    
 }

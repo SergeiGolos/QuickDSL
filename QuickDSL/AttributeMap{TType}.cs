@@ -1,8 +1,8 @@
 ﻿namespace QuickDSL;
 
-public class XmlAttributeOverrideLink<TType> : XmlAttributeOverrideLink
+public class AttributeMap<TType> : AttributeMap
 {    
-    public XmlAttributeOverrideLink(string? elementName, Type? type) 
+    public AttributeMap(string? elementName, Type? type) 
     {
         this.Attribute = new XmlElementAttribute(elementName, type);
         this.OverrideType = typeof(TType);

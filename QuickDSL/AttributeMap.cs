@@ -1,6 +1,6 @@
 ﻿namespace QuickDSL;
 
-public class XmlAttributeOverrideLink 
+public class AttributeMap 
 {    
     public XmlElementAttribute Attribute { get; set; }
 
