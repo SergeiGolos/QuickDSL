@@ -4,25 +4,25 @@ namespace QuickDSL;
 
 public class DslPropertyBuilder<TOverride>
 {
-    private readonly DslBuilder builder;
+    private readonly QuickDslBuilder builder;
 
-    public DslPropertyBuilder(DslBuilder builder)
+    public DslPropertyBuilder(QuickDslBuilder builder)
     {
         this.builder = builder;
     }
 
-    public DslBuilder With<TType>(string name)
+    public QuickDslBuilder With<TType>(string name)
     {
         this.builder.Add(new XmlAttributeOverrideLink<TOverride>(name, typeof(TType)));
         return this.builder;
     }
 }
 
-public class DslBuilder
+public class QuickDslBuilder
 {
     public List<XmlAttributeOverrideLink> dslTypes = new List<XmlAttributeOverrideLink>();
     
-    public DslBuilder Add(XmlAttributeOverrideLink link)
+    public QuickDslBuilder Add(XmlAttributeOverrideLink link)
     {
         this.dslTypes.Add(link);
         return this;
@@ -40,7 +40,6 @@ public class DslBuilder
             .GroupBy(n => n.OverrideType, n => n.Attribute)
             .ToDictionary(x=>x.Key, x=>(IEnumerable<XmlElementAttribute>)x);
         
-
         foreach (var type in serializable)
         {
             var properties = type.GetProperties()
