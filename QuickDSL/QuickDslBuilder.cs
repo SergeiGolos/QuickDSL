@@ -1,12 +1,14 @@
-﻿namespace QuickDSL;
+﻿using System.Collections;
+
+namespace QuickDSL;
 
 public class QuickDslBuilder
 {
-    public List<AttributeMap> dslTypes = new List<AttributeMap>();
+    public List<(Type, XmlElementAttribute)> dslTypes = new List<(Type, XmlElementAttribute)>();
 
-    public QuickDslBuilder Add(AttributeMap link)
+    public QuickDslBuilder Add<TOverride>(XmlElementAttribute attribute)
     {
-        this.dslTypes.Add(link);
+        this.dslTypes.Add((typeof(TOverride), attribute));
         return this;
     }
 
@@ -16,28 +18,28 @@ public class QuickDslBuilder
     }
     
     public QuickDslSerializer<TType> Build<TType>()
-    {
-        Type type = typeof(TType);
+    {        
         var overrides = new XmlAttributeOverrides();
         var groups = dslTypes
-            .GroupBy(n => n.OverrideType, n => n.Attribute)
+            .GroupBy(n => n.Item1, n => n.Item2)
             .ToDictionary(x => x.Key, x => (IEnumerable<XmlElementAttribute>)x);
 
-        var properties = type.GetProperties()
-            .Where(t => t.PropertyType.IsArray)
-            .Select(t => (Property: t, Type: t.PropertyType.GetElementType()))
-            .Where(t => groups.ContainsKey(t.Type));
-
-        foreach (var property in properties)
+        var typeEnumerator = new TypeEnumorator<TType>();
+        foreach (var type in typeEnumerator)
         {
-            var attributes = new XmlAttributes();
-            foreach (var element in groups[property.Type])
-            {
-                attributes.XmlElements.Add(element);
-            }
-            overrides.Add(type, property.Property.Name, attributes);
-        }
+            var properties = type.GetProperties()
+                .Where(t => t.PropertyType.IsArray)
+                .Select(t => (Property: t, Type: t.PropertyType.GetElementType()))
+                .Where(t => groups.ContainsKey(t.Type));
 
+            foreach (var property in properties)
+            {
+                var attributes = new XmlAttributes()
+                    .WithElements(groups[property.Type]);
+
+                overrides.Add(type, property.Property.Name, attributes);
+            }
+        }
         return new QuickDslSerializer<TType>(overrides);
     }
 }

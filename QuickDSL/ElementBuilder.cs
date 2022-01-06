@@ -10,8 +10,8 @@ public class ElementBuilder<TOverride>
     }
 
     public QuickDslBuilder With<TType>(string name)
+        where TType : TOverride
     {
-        this.builder.Add(new AttributeMap<TOverride>(name, typeof(TType)));
-        return this.builder;
+        return this.builder.Add<TOverride>(new XmlElementAttribute(name, typeof(TType)));        
     }
 }
