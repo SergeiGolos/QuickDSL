@@ -24,7 +24,7 @@ public class QuickDslBuilder
             .GroupBy(n => n.Item1, n => n.Item2)
             .ToDictionary(x => x.Key, x => (IEnumerable<XmlElementAttribute>)x);
 
-        var typeEnumerator = new TypeEnumorator<TType>();
+        var typeEnumerator = new TypeEnumerator<TType>();
         foreach (var type in typeEnumerator)
         {
             var properties = type.GetProperties()
@@ -34,9 +34,7 @@ public class QuickDslBuilder
 
             foreach (var property in properties)
             {
-                var attributes = new XmlAttributes()
-                    .WithElements(groups[property.Type]);
-
+                var attributes = new AnnotatedXmlAttributes(groups[key: property.Type]);
                 overrides.Add(type, property.Property.Name, attributes);
             }
         }

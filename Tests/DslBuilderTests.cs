@@ -1,12 +1,12 @@
 
 namespace Tests
 {
-    public class TypeEnumoratorTests
+    public class TypeEnumeratorTests
     {
         [Fact]
         public void I_should_get_more_types()
         {
-            var result = new TypeEnumorator<RootClass>();
+            var result = new TypeEnumerator<RootClass>();
 
             Assert.Equal(2, result.Count());
         }

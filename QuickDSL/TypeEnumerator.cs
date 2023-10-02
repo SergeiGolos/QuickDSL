@@ -1,8 +1,8 @@
 ﻿namespace QuickDSL;
 
-public class TypeEnumorator<TType> : List<Type>
+public class TypeEnumerator<TType> : List<Type>
 {
-    public TypeEnumorator()
+    public TypeEnumerator()
     {
         this.Add(typeof(TType));
         this.Parse(typeof(TType));
