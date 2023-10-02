@@ -1,19 +1,18 @@
-﻿namespace QuickDSL.Sequence
+﻿namespace QuickDSL.Sequence;
+
+
+public abstract class SimpleSequence           
 {
+    public SimpleStep[] Steps { get; set; }
 
-    public abstract class SimpleSequence           
+    public Dictionary<string, object> Execute()
     {
-        public SimpleStep[] Steps { get; set; }
+        var context = new SimpleContext();
 
-        public Dictionary<string, object> Execute()
+        foreach (var step in Steps)
         {
-            var context = new SimpleContext();
-
-            foreach (var step in Steps)
-            {
-                context.AddRange(step.Act(context));
-            }
-            return context;
+            context.AddRange(step.Act(context));
         }
+        return context;
     }
 }

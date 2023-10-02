@@ -1,7 +1,6 @@
-﻿namespace QuickDSL.Sequence
+﻿namespace QuickDSL.Sequence;
+
+public abstract class SimpleStep
 {
-    public abstract class SimpleStep
-    {
-        public abstract IEnumerable<(string, object)> Act(SimpleContext context);
-    }
+    public abstract IEnumerable<(string, object)> Act(SimpleContext context);
 }
