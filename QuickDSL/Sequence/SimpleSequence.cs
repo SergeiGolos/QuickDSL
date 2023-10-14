@@ -1,18 +1,9 @@
-﻿namespace QuickDSL.Sequence;
+﻿
+namespace QuickDSL.Sequence;
 
-
-public abstract class SimpleSequence           
+public interface ISimpleSequence
 {
-    public SimpleStep[] Steps { get; set; }
+    SimpleStep[] Steps { get; set; }
 
-    public Dictionary<string, object> Execute()
-    {
-        var context = new SimpleContext();
-
-        foreach (var step in Steps)
-        {
-            context.AddRange(step.Act(context));
-        }
-        return context;
-    }
+    Dictionary<string, object> Execute();    
 }

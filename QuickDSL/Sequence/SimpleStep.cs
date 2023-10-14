@@ -2,5 +2,5 @@
 
 public abstract class SimpleStep
 {
-    public abstract IEnumerable<(string, object)> Act(SimpleContext context);
+     public abstract IEnumerable<(string, object)> Act(SimpleContext context);
 }
