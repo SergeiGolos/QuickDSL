@@ -4,7 +4,7 @@ public class SimpleContext : Dictionary<string, object>
 {
     public void AddRange(IEnumerable<(string key, object value)> items) 
     {
-        foreach(var item in items)
+        foreach (var item in items)
         {
             if (!this.ContainsKey(item.key))
             {
