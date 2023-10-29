@@ -6,6 +6,12 @@ public class QuickDslBuilder
 {
     public List<(Type, XmlElementAttribute)> dslTypes = new List<(Type, XmlElementAttribute)>();
 
+    public QuickDslBuilder Add(Type overrideType, XmlElementAttribute attribute)
+    {
+        this.dslTypes.Add((overrideType, attribute));
+        return this;
+    }
+
     public QuickDslBuilder Add<TOverride>(XmlElementAttribute attribute)
     {
         this.dslTypes.Add((typeof(TOverride), attribute));
